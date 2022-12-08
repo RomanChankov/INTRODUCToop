@@ -1,13 +1,13 @@
-#include<iostream>
+п»ї#include<iostream>
 using  namespace std;
 
-//1. В классе Fraction написать метод ? ? ? reduce(? ? ? ) который сокращает дробь;
-//2. Для класса Fraction перегрузить;
-//-Арифметические операторы : +, -, *, / ;
+//1. Р’ РєР»Р°СЃСЃРµ Fraction РЅР°РїРёСЃР°С‚СЊ РјРµС‚РѕРґ ? ? ? reduce(? ? ? ) РєРѕС‚РѕСЂС‹Р№ СЃРѕРєСЂР°С‰Р°РµС‚ РґСЂРѕР±СЊ;
+//2. Р”Р»СЏ РєР»Р°СЃСЃР° Fraction РїРµСЂРµРіСЂСѓР·РёС‚СЊ;
+//-РђСЂРёС„РјРµС‚РёС‡РµСЃРєРёРµ РѕРїРµСЂР°С‚РѕСЂС‹ : +, -, *, / ;
 //-Increment / Decrement(++ / --);
-//-Оператор присваивания;
-//-Составные присваивания : +=, -=, *=, /=;
-//-Операторы сравнения : == , != , > , < , >= , <= ;
+//-РћРїРµСЂР°С‚РѕСЂ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ;
+//-РЎРѕСЃС‚Р°РІРЅС‹Рµ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ : +=, -=, *=, /=;
+//-РћРїРµСЂР°С‚РѕСЂС‹ СЃСЂР°РІРЅРµРЅРёСЏ : == , != , > , < , >= , <= ;
 
 
 #define WIDTH 26
@@ -49,7 +49,7 @@ public:
 		this->den = den;
 	}
 
-	////Конструктор копирования
+	////РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
 	////Fraction(const Fraction& other):
 	// Fraction( Fraction& other)//:
 	//	/*integer{other.integer},
@@ -61,7 +61,7 @@ public:
 	//	 num = other.num;
 	//	 den = other.den;
 	//	cout.width(WIDTH);
-	//	cout << left << "Конструктор копирования:" << this << endl;
+	//	cout << left << "РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ:" << this << endl;
 	//}
 
 	Fraction()
@@ -70,7 +70,7 @@ public:
 		this->num = 0;
 		setDen(den);
 		cout.width(WIDTH);
-		cout << left << "Конструктор без пар:" << this << endl;
+		cout << left << "РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р±РµР· РїР°СЂ:" << this << endl;
 	}
 	Fraction(int integer)
 	{
@@ -78,7 +78,7 @@ public:
 		this->num = 0;
 		setDen(den);
 		cout.width(WIDTH);
-		cout << left << "Конструктор с 1 пар:" << this << endl;
+		cout << left << "РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ 1 РїР°СЂ:" << this << endl;
 	}
 	Fraction(int num, int den)
 	{
@@ -86,7 +86,7 @@ public:
 		this->num = num;
 		this->den = den;
 		cout.width(WIDTH);
-		cout << left << "Конструктор с 2 пар:" << this << endl;
+		cout << left << "РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ 2 РїР°СЂ:" << this << endl;
 	}
 	Fraction(int integer, int num, int den)
 	{
@@ -94,12 +94,12 @@ public:
 		this->num = num;
 		this->den = den;
 		cout.width(WIDTH);
-		cout << left << "Конструктор с 3 пар:" << this << endl;
+		cout << left << "РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ 3 РїР°СЂ:" << this << endl;
 	}
 	~Fraction()
 	{
 		cout.width(WIDTH);
-		cout << left << "Деструктор:" << this << endl;
+		cout << left << "Р”РµСЃС‚СЂСѓРєС‚РѕСЂ:" << this << endl;
 	}
 	Fraction& toProper()
 	{
@@ -114,7 +114,7 @@ public:
 		return *this;
 	}
 
-	Fraction& reduce()	//Сокращение дроби
+	Fraction& reduce()	//РЎРѕРєСЂР°С‰РµРЅРёРµ РґСЂРѕР±Рё
 	{
 		if (num == 0)
 			return *this;
@@ -142,7 +142,7 @@ public:
 		return *this;
 	}
 
-	Fraction inverted()const	//Обращение дроби
+	Fraction inverted()const	//РћР±СЂР°С‰РµРЅРёРµ РґСЂРѕР±Рё
 	{
 		Fraction inv = *this;
 		inv.toInProper();
@@ -205,7 +205,7 @@ public:
 
 };
 
-//Перегрузка (*):
+//РџРµСЂРµРіСЂСѓР·РєР° (*):
 Fraction operator *(Fraction left, Fraction right)
 {
 	left.toInProper();
@@ -216,15 +216,15 @@ Fraction operator *(Fraction left, Fraction right)
 	res.toProper();
 	return res;*/
 
-	/*Fraction res(left.getNum() * right.getNum(), //Через конструктор
+	/*Fraction res(left.getNum() * right.getNum(), //Р§РµСЂРµР· РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 		left.getDen() * right.getDen());
 	res.toProper();
 	return res;*/
 
-	return Fraction(left.getNum() * right.getNum(), //Через временный безымянный объект
+	return Fraction(left.getNum() * right.getNum(), //Р§РµСЂРµР· РІСЂРµРјРµРЅРЅС‹Р№ Р±РµР·С‹РјСЏРЅРЅС‹Р№ РѕР±СЉРµРєС‚
 		left.getDen() * right.getDen()).toProper().reduce();
 }
-//Перегрузка(/)
+//РџРµСЂРµРіСЂСѓР·РєР°(/)
 Fraction operator /(const Fraction& l, const Fraction& r)
 {
 	/*l.toInProper();
@@ -263,22 +263,22 @@ istream& operator >>(istream& input, Fraction& other)
 void main()
 {
 	setlocale(0, "");
-	cout << "Простая дробь:" << endl;
+	cout << "РџСЂРѕСЃС‚Р°СЏ РґСЂРѕР±СЊ:" << endl;
 #ifdef CONSTRUCTORS_CHECK
 	Fraction A;
-	cout << "Дробь : "; A.print();
+	cout << "Р”СЂРѕР±СЊ : "; A.print();
 
 	Fraction B{ 5 };
-	cout << "Дробь : "; B.print();
+	cout << "Р”СЂРѕР±СЊ : "; B.print();
 
 	Fraction C{ 1,2 };
-	cout << "Дробь : "; C.print();
+	cout << "Р”СЂРѕР±СЊ : "; C.print();
 
 	Fraction D{ 2,3,4 };
-	cout << "Дробь : "; D.print();
+	cout << "Р”СЂРѕР±СЊ : "; D.print();
 
-	cout << "Перевод в неправильную:"; D.toInProper(); D.print();
-	cout << "Перевод в правильную:"; D.toProper(); D.print();
+	cout << "РџРµСЂРµРІРѕРґ РІ РЅРµРїСЂР°РІРёР»СЊРЅСѓСЋ:"; D.toInProper(); D.print();
+	cout << "РџРµСЂРµРІРѕРґ РІ РїСЂР°РІРёР»СЊРЅСѓСЋ:"; D.toProper(); D.print();
 
 	Fraction E{ D }; E.print();
 #endif // CONSTRUCTORS_CHECK
@@ -308,7 +308,7 @@ void main()
 #endif // INCREMENT_CHECK
 
 	Fraction A;
-	cout << "Введите обыкновенную дробь: ";
+	cout << "Р’РІРµРґРёС‚Рµ РѕР±С‹РєРЅРѕРІРµРЅРЅСѓСЋ РґСЂРѕР±СЊ: ";
 	cin >> A;
 	cout << A << endl;
 
