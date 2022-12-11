@@ -1,5 +1,9 @@
-﻿#include<iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
 using  namespace std;
+using std::cin;
+using std::cout;
+
 
 //1. В классе Fraction написать метод ? ? ? reduce(? ? ? ) который сокращает дробь;
 //2. Для класса Fraction перегрузить;
@@ -14,6 +18,8 @@ using  namespace std;
 class Fraction;
 Fraction operator *(Fraction left, Fraction right);
 Fraction operator /(const Fraction& l, const Fraction& r);
+Fraction operator +(const Fraction& l, const Fraction& r);
+Fraction operator -(const Fraction& l, const Fraction& r);
 
 class Fraction
 {
@@ -49,6 +55,7 @@ public:
 		this->den = den;
 	}
 
+
 	////Конструктор копирования
 	////Fraction(const Fraction& other):
 	// Fraction( Fraction& other)//:
@@ -72,7 +79,7 @@ public:
 		cout.width(WIDTH);
 		cout << left << "Конструктор без пар:" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->num = 0;
@@ -80,6 +87,7 @@ public:
 		cout.width(WIDTH);
 		cout << left << "Конструктор с 1 пар:" << this << endl;
 	}
+
 	Fraction(int num, int den)
 	{
 		integer = 0;
@@ -151,6 +159,15 @@ public:
 		//return Fraction(den, num);
 
 	}
+
+	Fraction& operator()(int integer, int num, int den)
+	{
+		setInt(integer);
+		setNum(num);
+		setDen(den);
+		return *this;
+	}
+
 	Fraction& operator =(const Fraction& other)
 	{
 		this->integer = other.integer;
@@ -168,6 +185,23 @@ public:
 	{
 		return *this = *this / other;
 	}
+	Fraction& operator +=(const Fraction& other)
+	{
+		return *this = *this + other;
+	}
+	Fraction& operator -=(const Fraction& other)
+	{
+		return *this = *this - other;
+	}
+	bool operator==(const Fraction& other)
+	{
+		return this->integer == other.integer && this->num == other.num && this->den == other.den;
+	}
+	bool operator!=(const Fraction& other)
+	{
+		return !(this->integer == other.integer && this->num == other.num && this->den == other.den);
+	}
+
 	//INCREMENT/DECREMENT
 	Fraction& operator ++() //Prefix
 	{
@@ -203,8 +237,39 @@ public:
 		cout << "\n";
 	}
 
+	//				Type-cast operators
+	explicit operator int()const
+	{
+		return integer;
+	}
+	explicit operator double()const
+	{
+		//return ((double)integer * (double)den + (double)num) / (double)den;
+		return (integer * (double)den + num) / den;
+		
+	}
+
 };
 
+bool operator <(Fraction l, Fraction r)
+{
+	return (l.toInProper().getNum() * r.toInProper().getDen() <
+		r.toInProper().getNum() * l.toInProper().getDen());
+}
+
+bool operator >(Fraction l, Fraction r)
+{
+	return (l.toInProper().getNum() * r.toInProper().getDen() >
+		r.toInProper().getNum() * l.toInProper().getDen());
+}
+bool operator >=(Fraction l, Fraction r)
+{
+	return l > r || l == r;
+}
+bool operator <=(Fraction& l, Fraction& r)
+{
+	return l < r || l == r;
+}
 //Перегрузка (*):
 Fraction operator *(Fraction left, Fraction right)
 {
@@ -234,6 +299,66 @@ Fraction operator /(const Fraction& l, const Fraction& r)
 	return l * r.inverted();
 }
 
+Fraction operator +(const Fraction& l, const Fraction& r)
+{
+	return Fraction
+	(l.getInt() + r.getInt(),
+		l.getNum() * r.getDen() + r.getNum() * l.getDen(),
+		l.getDen() * r.getDen()
+	).reduce().toProper();
+}
+
+Fraction operator -(const Fraction& l, const Fraction& r)
+{
+	return Fraction
+	(l.getInt() - r.getInt(),
+		l.getNum() * r.getDen() - r.getNum() * l.getDen(),
+		l.getDen() * r.getDen()
+	).reduce().toProper().toInProper();
+}
+istream& operator >>(istream& input, Fraction& other)
+{
+	other = Fraction();
+	//int integer, num, den;
+	//input >> integer >> num >> den;
+	/*other.setInt(integer);
+	other.setNum(num);
+	other.setDen(den);*/
+	//other(integer, num, den);
+	int number[3] = {};//В этом массиве будут храниться числовые значения полученные из строки
+	char delimiters[] = " /()";
+	const int SIZE = 256;
+	char buf[SIZE]{};
+	int n = 0;// Счетчик полученных чисел
+	input.getline(buf, SIZE);
+	//Функция strtok делит строку на подстроки ,используя разделители,каждый ражделитель заменяется нулем
+	for (char* pch = strtok(buf, delimiters); pch; pch = strtok(NULL, delimiters))
+	{
+		number[n++] = atoi(pch);// atoi()- функция Принимает строку и если строка явлчется числом то возвращает интовый
+		// эквивалент этого числа
+	}
+	//cout << buf << endl;
+	/*for (int i = 0; i < n; i++)
+		cout << number[i] << "\t";
+	cout << endl;*/
+	switch (n)
+	{
+	case 1: other.setInt(number[0]);
+		break;
+	case 2:
+		other.setNum(number[0]);
+		other.setDen(number[1]);
+		break;
+	case 3:
+		other.setInt(number[0]);
+		other.setNum(number[1]);
+		other.setDen(number[2]);
+
+	}
+	return input;
+
+}
+
 ostream& operator<<(ostream& os, const Fraction& obj)
 {
 	if (obj.getInt())
@@ -242,23 +367,17 @@ ostream& operator<<(ostream& os, const Fraction& obj)
 	{
 		os << obj.getNum() << "/" << obj.getDen();
 	}
-	else os << 0;
+	else if (obj.getInt()==0)
+		os<<0;
 	cout << endl;
 	return os;
-}
-istream& operator >>(istream& input, Fraction& other)
-{
-	int integer, num, den;
-	input >> integer >> num >> den;
-	other.setInt(integer);
-	other.setNum(num);
-	other.setDen(den);
-	return input;
 }
 
 //#define CONSTRUCTORS_CHECK
 //#define ARIPHMETICAL_OPERATORS_CHECK
 //#define INCREMENT_CHECK
+//#define COMPARISON_OPERATORS
+//#define ISTREAM_OPERATOR_CHECK
 
 void main()
 {
@@ -283,23 +402,65 @@ void main()
 	Fraction E{ D }; E.print();
 #endif // CONSTRUCTORS_CHECK
 
-#ifdef ARIPHMETICAL_OPERATORS_CHECK
-	Fraction A{ 2,3,4 };
-	Fraction B{ 3,4,5 };
-	Fraction C = A / B;
-	C.print();
+#ifdef ISTREAM_OPERATOR_CHECK
+	Fraction A{ 50,75,80 };
+	//Fraction B{ 1,1,7 };
+	//Fraction A;
+	cin >> A;
+	cout << A << endl;
+#endif // ISTREAM_OPERATOR_CHECK
 
-	A *= B;
+
+#ifdef ARIPHMETICAL_OPERATORS_CHECK
+	//Fraction C = A - B;
+	//C.print();
+	/*A *= B;
 	A.print();
 	A /= B;
-	A.print();
+	A.print();*/
 #endif // ARIPHMETICAL_OPERATORS_CHECK
 
+#ifdef COMPARISON_OPERATORS
+	/*bool res = A == B;
+if (res)
+	cout << "Равны" << endl;
+else
+	cout << "Не равны" << endl;
+bool res = A != B;
+if (res)
+	cout << " Не равны" << endl;
+else
+	cout << "Равны" << endl;
+bool res = A < B;
+if (res)
+	cout << "A<B " << endl;
+else
+	cout << "A>B " << endl;
+bool res = A > B;
+if (res)
+	cout << "A>B " << endl
+else
+cout << "A<B " << endl;*/
+/*bool res = A >= B;
+if (res)
+	cout << "A>=B" << endl;
+else
+cout << "A<B" << endl;*/
+/*bool res = A <= B;
+if (res)
+	cout << "A<=B" << endl;
+else
+cout << "A>B" << endl;*/
+/*bool res = A == B;
+cout << res << endl;*/
+#endif // COMPARISON_OPERATORS
+
+
 #ifdef INCREMENT_CHECK
-	/*for (Fraction i(1, 2); i.getInt() < 10; i++)
-	{
-		i.print();
-	}*/
+					/*for (Fraction i(1, 2); i.getInt() < 10; i++)
+					{
+						i.print();
+					}*/
 	for (Fraction i(10, 1, 2); i.getInt() > 0; i--)
 	{
 		i.print();
@@ -307,9 +468,18 @@ void main()
 
 #endif // INCREMENT_CHECK
 
-	Fraction A;
-	cout << "Введите обыкновенную дробь: ";
-	cin >> A;
-	cout << A << endl;
+	
+	//Fraction A{ 2,3,4 };
+	////int a = A;
+	//cout << A << endl << endl;
+	//double b =(double) A;
+	//cout <<b << endl;
 
+
+	/*Fraction A=2.75;
+	
+	cout <<A << endl;*/
+
+
+	
 }
